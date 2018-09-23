@@ -21,3 +21,15 @@ let get_file_contents path =
     really_input ic s 0 n;
     close_in ic;
     Bytes.to_string s
+
+let get_files_contents path =
+  get_dir_contents path
+  |> List.map (fun f -> f, get_file_contents f)
+
+let write_file_contents (name, contents) =
+  let oc = open_out (name ^ "~") in
+  output_string oc contents;
+  close_out oc
+
+let replace_content =
+  List.iter write_file_contents
