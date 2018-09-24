@@ -19,22 +19,10 @@ let reduce_paths path =
     0 -- (List.length paths)
     |> List.map (fun i -> String.concat "/" (init i paths))
 
-let find_occurences needle haystack =
-    let str_len = String.length needle in
-    let rec aux acc position =
-        let re = Str.regexp ("\"" ^ needle ^ "\\(.*\\)\"" ) in
-        try
-            let i = Str.search_forward re haystack position in
-            aux (i :: acc) (i + str_len)
-        with
-            Not_found -> acc
-    in aux [] 0
-
 let find_sep_lengths pattern needle haystack =
     let str_len = String.length needle in
     let rec aux acc position =
-      (* Printf.printf "sep lengths\nneedle: %s\nhaystack: %s\n" needle haystack;*)
-        let re = Str.regexp ("\"" ^ needle ^ ".*\"" ) in
+        let re = Str.regexp ("\"" ^ needle ^ "/.*\"" ) in
         try
           let i = Str.search_forward re haystack position in
           let needle_len = String.length needle in
@@ -51,9 +39,12 @@ let find_sep_lengths pattern needle haystack =
     in List.rev (aux [] 0)
 
 let path_up n =
-    0 -- (n - 1)
-    |> List.map (fun _x -> "..")
-    |> String.concat "/"
+    if n = 0 then
+        "."
+    else
+        0 -- (n - 1)
+        |> List.map (fun _x -> "..")
+        |> String.concat "/"
 
 let rec replace xs needle haystack =
     if List.length xs = 0 then
