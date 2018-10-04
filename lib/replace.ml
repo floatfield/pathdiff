@@ -32,7 +32,6 @@ let find_sep_lengths pattern needle haystack =
             |> Core.String.filter ~f:(fun c -> c = '/')
             |> String.length
           in
-            (* Printf.printf "%i\n%i\n" i str_len; *)
           aux (l :: acc) (i + str_len)
         with
             Not_found -> acc
